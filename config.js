@@ -6,5 +6,5 @@ module.exports = {
   TEST_DATABASE_URL:
     process.env.TEST_DATABASE_URL ||
     'mongodb://useradmin:Password1@ds155268.mlab.com:55268/hand-to-hand',
-  PORT: process.env.PORT || 'http://localhost:3000'
+  PORT: process.env.PORT || 'http://localhost:8000'
 };
