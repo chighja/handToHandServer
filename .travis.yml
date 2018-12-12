@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
   - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: OxL4079m+0N+Ysa2pMHNNyz2OzEDy7QW59I0C9j8LagY+cR6xegkZIhxCdCObTZQdbO42t+J3mm9yntoFFhAvuSOU/Ll7Ob0gtnCUpFUYf2rO++rsvnkOdhBCBWbmsCjYGVWyJIA98o0U6LSq6zVEYX0lGZO72H8536Qq0LgqP357ceboaBawybv+60myTDau9ni8tXXk3mI3cdMzEMY7oiV7taC8jZHvILNOcZaHgV0n/hE1PtUoc6XdOpa/K2dw9J0zUlkyfjfK14taIXrPfYLMyD4cRYVcU5G42suCioizSKM4TWt3AEf6fIu8mEs7xyXQSg9Db7mRcINA9qb33vbZmJ6FijYFJ3rMC/8K02jge8tdWlNvWAXxEX7cIrE2AuSzFCRRXRszG0yTp9F5iMK1F0PSAaT673J1nZTx60ch54yk/GFXYKrP5RZweQqsqBfHzMl8lSFN+X9Lo8VLSbDd66GngCv6usKSgPvOO3H2ZCdeHAIPH3SgaO7DRkNMWQBrjS+Kyzc5G9AzvE/GlB3Ysfon4eypF6nfd5lyWpClMjNBu8rc5NeIqwVy+h0+o7ko6QZOGvD/QN7fk4pcay1+6QU6mPn5ayDkQPIvyvJV/YfSmiA58lAirpdwUK6OqMERMzk1al/yxc6QOw7wdqfgxo7bK2RRTKYckF6m+0=
+  app: stormy-falls-89261
+  on:
+    repo: chighja/handToHandServer
