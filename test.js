@@ -11,19 +11,24 @@ const { TEST_DATABASE_URL, PORT } = require('./config');
 chai.use(chaiHttp);
 
 // seeds the test-database with mock data
-function seedCharVoteData() {
-  console.info('seeding character vote data');
-  const seedData = generateCharVoteData();
+function seedMatchData() {
+  console.info('seeding match data');
+  const seedData = [];
+  for (let i = 1; i <= 6; i++) {
+    seedData.push(generateMatchData());
+  }
   return Vote.insertMany(seedData);
 }
 
-// creates user comment objects
-function generateCharVoteData() {
+// creates match object
+function generateMatchData() {
   return {
     nameChar1: faker.name.findName(),
     voteChar1: faker.random.number(),
+    image: faker.lorem.sentence(),
     nameChar2: faker.name.findName(),
-    voteChar2: faker.random.number()
+    voteChar2: faker.random.number(),
+    image2: faker.lorem.sentence()
   };
 }
 
@@ -33,13 +38,13 @@ function tearDownDb() {
   return mongoose.connection.dropDatabase();
 }
 
-// database 'open server, create database, remove database, close server' process
-describe('char vote data resource', function() {
+// database setup and teardown process
+describe('match data resource', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
   beforeEach(function() {
-    return seedCharVoteData();
+    return seedMatchData();
   });
   afterEach(function() {
     return tearDownDb();
@@ -50,69 +55,73 @@ describe('char vote data resource', function() {
 
   // GET test
   describe('GET', function() {
-    it('should get char vote by id', function() {
+    it('should get all existing match objects', function() {
       return chai
         .request(app)
-        .get('/votes/:id')
+        .get('/votes')
         .then(function(res) {
           expect(res).to.have.status(200);
           expect(res.body).to.have.lengthOf.at.least(1);
         });
     });
 
-    it('should get char votes with correct fields', function(done) {
+    it('should get match objects with correct fields', function(done) {
       let resVote;
       return chai
         .request(app)
         .get('/votes')
-        .then(res => {
+        .then(function(res) {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
-          expect(res.body).to.be.a('array');
           expect(res.body).to.have.lengthOf.at.least(1);
-          res.body.forEach(vote => {
-            expect(vote).to.be.a('object');
-            expect(vote).to.include.keys(
+          res.body.forEach(function(Vote) {
+            expect(Vote).to.be.a('object');
+            expect(Vote).to.include.keys(
               '_id',
               'nameChar1',
               'voteChar1',
+              'image1',
               'nameChar2',
-              'voteChar2'
+              'voteChar2',
+              'image2'
             );
           });
           resVote = res.body[0];
           console.log(resVote._id);
           return Vote.findById(resVote._id);
         })
-        .then(vote => {
-          expect(resVote.nameChar1).to.equal(vote.nameChar1);
-          expect(resVote.voteChar1).to.equal(vote.voteChar1);
-          expect(resVote.nameChar2).to.equal(vote.nameChar2);
-          expect(resVote.voteChar2).to.equal(vote.voteChar2);
+        .then(function(Vote) {
+          expect(res.Vote.nameChar1).to.equal(Vote.nameChar1);
+          expect(res.Vote.voteChar1).to.equal(Vote.voteChar1);
+          expect(res.Vote.image1).to.equal(Vote.image1);
+          expect(res.Vote.nameChar2).to.equal(Vote.nameChar2);
+          expect(res.Vote.voteChar2).to.equal(Vote.voteChar2);
+          expect(res.Vote.image2).to.equal(Vote.image2);
         })
         .then(done());
     });
   });
 
+  // PATCH test
   describe('PATCH', function() {
-    it('should update sent fields', function() {
-      const updateVote = {
-        charVote1: faker.random.number()
+    it('should update vote number value', function() {
+      const updatedVote = {
+        voteChar1: +1
       };
       return Vote.findOne()
-        .then(vote => {
-          updateVote.id = vote.id;
+        .then(function(vote) {
+          updatedVote.id = vote.id;
           return chai
             .request(app)
-            .put(`/votes/${vote.id}`)
-            .send(updateVote);
+            .patch(`/votes/${vote.id}`)
+            .send(updatedVote);
         })
-        .then(res => {
+        .then(function(res) {
           expect(res).to.have.status(200);
-          return Vote.findById(updateVote.id);
+          return Vote.findById(updatedVote.id);
         })
-        .then(vote => {
-          expect(vote.voteChar1).to.equal(updateVote.voteChar1);
+        .then(function(vote) {
+          expect(vote.voteChar1).to.equal(updatedVote.voteChar1);
         });
     });
   });
@@ -120,17 +129,17 @@ describe('char vote data resource', function() {
 
 let server;
 
-function runServer(databaseURL, port = PORT) {
+function runServer(TEST_DATABASE_URL, PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(
-      databaseURL,
+      TEST_DATABASE_URL,
       err => {
         if (err) {
           return reject(err);
         }
         server = app
-          .listen(port, () => {
-            console.log(`Your app is listening on port ${port}`);
+          .listen(PORT, () => {
+            console.log(`your app is listening on port ${PORT}`);
             resolve();
           })
           .on('error', err => {
@@ -145,7 +154,7 @@ function runServer(databaseURL, port = PORT) {
 function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log('Closing server');
+      console.log('closing server');
       server.close(err => {
         if (err) {
           return reject(err);
@@ -155,3 +164,5 @@ function closeServer() {
     });
   });
 }
+
+app.listen(process.env.PORT || 5000);
