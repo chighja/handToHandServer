@@ -5,14 +5,15 @@ const { CLIENT_ORIGIN } = require('./config');
 const { Vote } = require('./voteModel');
 
 const app = express();
-app.use(express.json());
-app.use(express.static('public'));
 
 app.use(
   cors({
     origin: CLIENT_ORIGIN
   })
 );
+
+app.use(express.json());
+app.use(express.static('public'));
 
 // connecting to mongoDb
 mongoose.connect(
