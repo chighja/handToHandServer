@@ -28,7 +28,7 @@ db.once('open', function() {
   console.log('Connection error:', error);
 });
 
-app.get('/votes', cors(), (req, res) => {
+app.get('/votes', (req, res) => {
   return Vote.find()
     .then(data => {
       res.json(data);
@@ -40,7 +40,7 @@ app.get('/votes', cors(), (req, res) => {
 });
 
 // GET votes by id
-app.get('/votes/:id', cors(), (req, res) => {
+app.get('/votes/:id', (req, res) => {
   return Vote.findById(req.params.id)
     .then(data => {
       res.json(data);
@@ -52,7 +52,7 @@ app.get('/votes/:id', cors(), (req, res) => {
 });
 
 // PATCH update vote number
-app.patch('/votes/:id', cors(), (req, res) => {
+app.patch('/votes/:id', (req, res) => {
   let updateableFields = ['voteChar1', 'voteChar2'];
 
   Vote.findById(req.params.id, (error, vote) => {
