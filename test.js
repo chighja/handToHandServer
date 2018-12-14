@@ -129,7 +129,7 @@ describe('match data resource', function() {
 
 let server;
 
-function runServer(TEST_DATABASE_URL, PORT) {
+function runServer(TEST_DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(
       TEST_DATABASE_URL,
@@ -138,8 +138,8 @@ function runServer(TEST_DATABASE_URL, PORT) {
           return reject(err);
         }
         server = app
-          .listen(PORT, () => {
-            console.log(`your app is listening on port ${PORT}`);
+          .listen(port, () => {
+            console.log(`your app is listening on port ${port}`);
             resolve();
           })
           .on('error', err => {
