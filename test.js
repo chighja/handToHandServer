@@ -9,19 +9,6 @@ const { TEST_DATABASE_URL, PORT } = require('./config');
 
 chai.use(chaiHttp);
 
-// connecting to mongoDb
-// mongoose.connect(
-//   'mongodb://useradmin:Password1@ds155288.mlab.com:55288/hand-to-hand-test',
-//   { useNewUrlParser: true }
-// );
-// const db = mongoose.connection;
-
-// db.once('open', function() {
-//   console.log('Connected to database');
-// }).on('error', function(error) {
-//   console.log('Connection error:', error);
-// });
-
 // seeds the test-database with mock data
 function seedMatchData() {
   console.info('seeding match data');
