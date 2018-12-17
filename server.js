@@ -7,17 +7,12 @@ const { Vote } = require('./voteModel');
 
 const app = express();
 
-var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-
-// app.use(
-//   cors({
-//     origin: CLIENT_ORIGIN
-//   })
-// );
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    optionsSuccessStatus: 200
+  })
+);
 
 app.use(express.json());
 app.use(express.static('public'));
