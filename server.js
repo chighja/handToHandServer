@@ -6,12 +6,21 @@ const { Vote } = require('./voteModel');
 
 const app = express();
 
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN,
-    optionsSuccessStatus: 200
-  })
-);
+// app.use(
+//   cors({
+//     origin: CLIENT_ORIGIN,
+//     optionsSuccessStatus: 200
+//   })
+// );
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -29,7 +38,7 @@ db.once('open', function() {
   console.log('Connection error:', error);
 });
 
-app.get('votes', (req, res) => {
+app.get('/votes', (req, res) => {
   return Vote.find()
     .then(data => {
       res.json(data);
