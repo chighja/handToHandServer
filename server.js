@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
@@ -6,21 +7,23 @@ const { Vote } = require('./voteModel');
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: CLIENT_ORIGIN,
-//     optionsSuccessStatus: 200
-//   })
-// );
+app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    optionsSuccessStatus: 200
+  })
+);
+
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept'
+//   );
+//   next();
+// });
 
 app.use(express.json());
 app.use(express.static('public'));
