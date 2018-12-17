@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
@@ -7,8 +7,7 @@ const { Vote } = require('./voteModel');
 
 const app = express();
 
-app.use(bodyParser.json());
-
+// allow requests from the client's origin
 app.use(
   cors({
     origin: CLIENT_ORIGIN,
@@ -16,15 +15,7 @@ app.use(
   })
 );
 
-// app.use(function(req, res, next) {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept'
-//   );
-//   next();
-// });
-
+// app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -41,6 +32,7 @@ db.once('open', function() {
   console.log('Connection error:', error);
 });
 
+// GET all match-up objects
 app.get('/votes', (req, res) => {
   return Vote.find()
     .then(data => {
@@ -52,7 +44,7 @@ app.get('/votes', (req, res) => {
     });
 });
 
-// GET votes by id
+// GET match-up objects by id
 app.get('/votes/:id', (req, res) => {
   return Vote.findById(req.params.id)
     .then(data => {
