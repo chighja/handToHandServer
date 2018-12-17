@@ -6,6 +6,8 @@ const { Vote } = require('./voteModel');
 
 const app = express();
 
+app.use(allowCrossDomain);
+
 app.use(
   cors({
     origin: CLIENT_ORIGIN
