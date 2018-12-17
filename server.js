@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-// const bodyParser = require('body-parser');
 const { CLIENT_ORIGIN } = require('./config');
 const { Vote } = require('./voteModel');
 
@@ -30,7 +29,7 @@ db.once('open', function() {
   console.log('Connection error:', error);
 });
 
-app.get('/votes', (req, res) => {
+app.get('votes', (req, res) => {
   return Vote.find()
     .then(data => {
       res.json(data);
