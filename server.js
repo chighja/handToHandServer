@@ -12,10 +12,12 @@ const app = express();
 //   })
 // );
 
-const corsOptions = {
-  origin: CLIENT_ORIGIN,
-  optionsSuccessStatus: 200
-};
+app.use(cors(res.setHeader('Access-Control-Allow-Origin', CLIENT_ORIGIN)));
+
+// const corsOptions = {
+//   origin: CLIENT_ORIGIN,
+//   optionsSuccessStatus: 200
+// };
 
 app.use(express.json());
 app.use(express.static('public'));
