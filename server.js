@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+// const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
 const { Vote } = require('./voteModel');
 
@@ -11,13 +11,6 @@ const app = express();
 //     origin: CLIENT_ORIGIN
 //   })
 // );
-
-app.use(cors(res.setHeader('Access-Control-Allow-Origin', CLIENT_ORIGIN)));
-
-// const corsOptions = {
-//   origin: CLIENT_ORIGIN,
-//   optionsSuccessStatus: 200
-// };
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -35,7 +28,9 @@ db.once('open', function() {
   console.log('Connection error:', error);
 });
 
-app.get('/votes', cors(corsOptions), (req, res) => {
+app.get('/votes', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', CLIENT_ORIGIN);
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
   return Vote.find()
     .then(data => {
       res.json(data);
@@ -47,7 +42,9 @@ app.get('/votes', cors(corsOptions), (req, res) => {
 });
 
 // GET votes by id
-app.get('/votes/:id', cors(corsOptions), (req, res) => {
+app.get('/votes/:id', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', CLIENT_ORIGIN);
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
   return Vote.findById(req.params.id)
     .then(data => {
       res.json(data);
@@ -59,7 +56,9 @@ app.get('/votes/:id', cors(corsOptions), (req, res) => {
 });
 
 // PATCH update vote number
-app.patch('/votes/:id', cors(corsOptions), (req, res) => {
+app.patch('/votes/:id', (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', CLIENT_ORIGIN);
+  res.setHeader('Access-Control-Allow-Methods', 'PATCH');
   let updateableFields = ['voteChar1', 'voteChar2'];
 
   Vote.findById(req.params.id, (error, vote) => {
