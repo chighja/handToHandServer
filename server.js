@@ -12,7 +12,7 @@ app.use(function(req, res, next) {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
-  res.header('AccessControlAllowMethods', 'GET, PATCH');
+  res.header('Access-Control-Allow-Methods', 'GET, PATCH');
   next();
 });
 
