@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const faker = require('faker');
 const { Vote } = require('./voteModel');
-const { TEST_DATABASE_URL, PORT } = require('./config');
+const { DATABASE_URL, PORT } = require('./config');
 const { app } = require('./server');
 
 chai.use(chaiHttp);
@@ -40,7 +40,7 @@ function tearDownDb() {
 // database setup and teardown process
 describe('match data resource', function() {
   before(function() {
-    return runServer(TEST_DATABASE_URL);
+    return runServer(DATABASE_URL);
   });
   beforeEach(async () => {
     await seedMatchData();
@@ -125,10 +125,10 @@ describe('match data resource', function() {
 
 let server;
 
-function runServer(TEST_DATABASE_URL, port = PORT) {
+function runServer(DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(
-      TEST_DATABASE_URL,
+      DATABASE_URL,
       err => {
         if (err) {
           return reject(err);

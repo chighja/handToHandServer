@@ -4,7 +4,7 @@
   "description": "",
   "main": "config.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "DATABASE_URL=mongodb://useradmin:Password1@ds155288.mlab.com:55288/hand-to-hand-test mocha --exit",
     "start": "node server.js",
     "go": "CLIENT_ORIGIN=http://localhost:3000 node server.js"
   },
