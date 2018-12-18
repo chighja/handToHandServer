@@ -5,7 +5,8 @@
   "main": "config.js",
   "scripts": {
     "test": "mocha --exit",
-    "start": "node server.js"
+    "start": "node server.js",
+    "go": "CLIENT_ORIGIN=http://localhost:3000 node server.js"
   },
   "author": "C High",
   "license": "ISC",

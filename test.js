@@ -1,4 +1,3 @@
-const express = require('express');
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
@@ -6,6 +5,7 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const { Vote } = require('./voteModel');
 const { TEST_DATABASE_URL, PORT } = require('./config');
+const { app } = require('./server');
 
 chai.use(chaiHttp);
 
@@ -24,7 +24,7 @@ function generateMatchData() {
   return {
     nameChar1: faker.name.findName(),
     voteChar1: faker.random.number(),
-    image: faker.lorem.sentence(),
+    image1: faker.lorem.sentence(),
     nameChar2: faker.name.findName(),
     voteChar2: faker.random.number(),
     image2: faker.lorem.sentence()
@@ -42,11 +42,11 @@ describe('match data resource', function() {
   before(function() {
     return runServer(TEST_DATABASE_URL);
   });
-  beforeEach(function() {
-    return seedMatchData();
+  beforeEach(async () => {
+    await seedMatchData();
   });
-  afterEach(function() {
-    return tearDownDb();
+  afterEach(async () => {
+    await tearDownDb();
   });
   after(function() {
     return closeServer();
@@ -64,40 +64,37 @@ describe('match data resource', function() {
         });
     });
 
-    it('should get match objects with correct fields', function(done) {
-      let resVote;
-      return chai
-        .request(app)
-        .get('/votes')
-        .then(function(res) {
-          expect(res).to.have.status(200);
-          expect(res).to.be.json;
-          expect(res.body).to.have.lengthOf.at.least(1);
-          res.body.forEach(function(Vote) {
-            expect(Vote).to.be.a('object');
-            expect(Vote).to.include.keys(
-              '_id',
-              'nameChar1',
-              'voteChar1',
-              'image1',
-              'nameChar2',
-              'voteChar2',
-              'image2'
-            );
-          });
-          resVote = res.body[0];
-          console.log(resVote._id);
-          return Vote.findById(resVote._id);
-        })
-        .then(function(Vote) {
-          expect(res.Vote.nameChar1).to.equal(Vote.nameChar1);
-          expect(res.Vote.voteChar1).to.equal(Vote.voteChar1);
-          expect(res.Vote.image1).to.equal(Vote.image1);
-          expect(res.Vote.nameChar2).to.equal(Vote.nameChar2);
-          expect(res.Vote.voteChar2).to.equal(Vote.voteChar2);
-          expect(res.Vote.image2).to.equal(Vote.image2);
-        })
-        .then(done());
+    it('should get match objects with correct fields', async () => {
+      try {
+        let resVote;
+        const res = await chai.request(app).get('/votes');
+        expect(res).to.have.status(200);
+        expect(res).to.be.json;
+        expect(res.body).to.have.lengthOf.at.least(1);
+        res.body.forEach(function(vote) {
+          expect(vote).to.be.a('object');
+          expect(vote).to.include.keys(
+            '_id',
+            'nameChar1',
+            'voteChar1',
+            'image1',
+            'nameChar2',
+            'voteChar2',
+            'image2'
+          );
+        });
+        resVote = res.body[0];
+        const vote = await Vote.findById(resVote._id);
+        expect(resVote.nameChar1).to.equal(vote.nameChar1);
+        expect(resVote.voteChar1).to.equal(vote.voteChar1);
+        expect(resVote.image1).to.equal(vote.image1);
+        expect(resVote.nameChar2).to.equal(vote.nameChar2);
+        expect(resVote.voteChar2).to.equal(vote.voteChar2);
+        expect(resVote.image2).to.equal(vote.image2);
+        return Promise.resolve();
+      } catch (err) {
+        return Promise.reject(err);
+      }
     });
   });
 
