@@ -25,3 +25,6 @@
 
 You can view the front end application of ["Hand-To-Hand" here!](https://warm-inlet-87726.herokuapp.com/)
 
+### Built with:
+
+This project uses NodeJS, ExpressJS, MongooseJS, and MongoDB.
