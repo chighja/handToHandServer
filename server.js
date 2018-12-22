@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { CLIENT_ORIGIN } = require('./config');
+const { DATABASE_URL, CLIENT_ORIGIN } = require('./config');
 const { Vote } = require('./voteModel');
 
 const app = express();
@@ -21,7 +21,7 @@ app.use(express.static('public'));
 
 // connecting to mongoDb
 mongoose.connect(
-  'mongodb://useradmin:Password1@ds155268.mlab.com:55268/hand-to-hand',
+  DATABASE_URL,
   { useNewUrlParser: true }
 );
 const db = mongoose.connection;
@@ -30,6 +30,7 @@ db.once('open', function() {
   console.log('Connected to database');
 }).on('error', function(error) {
   console.log('Connection error:', error);
+  mongoose.disconnect();
 });
 
 // GET all match-up objects

@@ -4,7 +4,6 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const faker = require('faker');
 const { Vote } = require('./voteModel');
-const { DATABASE_URL, PORT } = require('./config');
 const { app } = require('./server');
 
 chai.use(chaiHttp);
@@ -39,17 +38,11 @@ function tearDownDb() {
 
 // database setup and teardown process
 describe('match data resource', function() {
-  before(function() {
-    return runServer(DATABASE_URL);
-  });
   beforeEach(async () => {
     await seedMatchData();
   });
   afterEach(async () => {
     await tearDownDb();
-  });
-  after(function() {
-    return closeServer();
   });
 
   // GET test
@@ -122,41 +115,3 @@ describe('match data resource', function() {
     });
   });
 });
-
-let server;
-
-function runServer(DATABASE_URL, port = PORT) {
-  return new Promise((resolve, reject) => {
-    mongoose.connect(
-      DATABASE_URL,
-      err => {
-        if (err) {
-          return reject(err);
-        }
-        server = app
-          .listen(port, () => {
-            console.log(`your app is listening on port ${port}`);
-            resolve();
-          })
-          .on('error', err => {
-            mongoose.disconnect();
-            reject(err);
-          });
-      }
-    );
-  });
-}
-
-function closeServer() {
-  return mongoose.disconnect().then(() => {
-    return new Promise((resolve, reject) => {
-      console.log('closing server');
-      server.close(err => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    });
-  });
-}
