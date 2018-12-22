@@ -1,25 +1,55 @@
 ## Hand-To-Hand server
 
-* **URL**
-  
-  <_/votes_>
+* **Data Types:**
 
-* **Method:**
+  * **Match:**
   
-  `GET` | `PATCH`
+  ```
+    {
+      "_id": "String",
+      "nameChar1": "String",
+      "voteChar1": "Number",
+      "image1": "String",
+      "nameChar2": "String",
+      "voteChar2": "Number",
+      "image2": "String"
+    }
+  ```
+
+* **Routes:**
   
-* **Required:**
+  * **GET to <_/votes_>**
   
-  `id=[integer]`
+    Response:
+  
+    ```Match[]```
+  
+  * **GET to <_/votes/:id_>**
+  
+    Response:
+  
+    ```Match```
+  
+  * **PATCH to <_/votes/:id_>**
+  
+    Request:
+    ```
+      {
+        "voteChar1": "Number",
+        "voteChar2": "Number"
+      }
+    ```
+    Response:
+  
+    ```{ vote : Match }```
   
 * **Success Response:**
   
   * **Code:** 200
-    **Content** `{ id : 12 }`
     
 * **Error Response:**
   
-  * **Code:** 401 UNAUTHORIZED
+  * **Code:** 500
 
 ### Check it out!
 
