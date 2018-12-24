@@ -58,3 +58,9 @@ You can view the front end application of ["Hand-To-Hand" here!](https://warm-in
 ### Built with:
 
 This project uses NodeJS, ExpressJS, MongooseJS, and MongoDB.
+
+
+### To run locally:
+
+Run "npm run go" from your command line.
+
